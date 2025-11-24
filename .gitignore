@@ -27,6 +27,7 @@ output_project/
 spring_batch_output.zip
 *.log
 logs/
+.env
 
 # Testing
 .coverage
