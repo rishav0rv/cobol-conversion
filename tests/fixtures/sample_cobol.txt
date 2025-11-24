@@ -1,0 +1,49 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. TEST-PROG.
+       
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT INPUT-FILE ASSIGN TO 'INPUT.DAT'
+               ORGANIZATION IS LINE SEQUENTIAL.
+           SELECT OUTPUT-FILE ASSIGN TO 'OUTPUT.DAT'
+               ORGANIZATION IS LINE SEQUENTIAL.
+       
+       DATA DIVISION.
+       FILE SECTION.
+       FD  INPUT-FILE.
+       01  INPUT-RECORD.
+           05 IN-ID            PIC 9(5).
+           05 IN-NAME          PIC X(30).
+           05 IN-AMOUNT        PIC 9(7)V99.
+       
+       FD  OUTPUT-FILE.
+       01  OUTPUT-RECORD.
+           05 OUT-ID           PIC 9(5).
+           05 OUT-NAME         PIC X(30).
+           05 OUT-AMOUNT       PIC 9(7)V99.
+       
+       WORKING-STORAGE SECTION.
+       01  WS-EOF              PIC X VALUE 'N'.
+       
+       PROCEDURE DIVISION.
+       MAIN-PARA.
+           OPEN INPUT INPUT-FILE
+           OPEN OUTPUT OUTPUT-FILE
+           
+           PERFORM UNTIL WS-EOF = 'Y'
+               READ INPUT-FILE
+                   AT END MOVE 'Y' TO WS-EOF
+                   NOT AT END PERFORM PROCESS-RECORD
+               END-READ
+           END-PERFORM
+           
+           CLOSE INPUT-FILE
+           CLOSE OUTPUT-FILE
+           STOP RUN.
+       
+       PROCESS-RECORD.
+           MOVE IN-ID TO OUT-ID
+           MOVE IN-NAME TO OUT-NAME
+           ADD 100 TO IN-AMOUNT GIVING OUT-AMOUNT
+           WRITE OUTPUT-RECORD.

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COBOL to Java Spring Batch Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+        <div class="loading-text">Converting COBOL to Java Spring Batch...</div>
+        <div style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">This may take a minute</div>
+    </div>
+
+    <div class="container">
+        <h1>🔄 COBOL to Java Converter</h1>
+        <p class="subtitle">Transform legacy COBOL code into modern Java Spring Batch applications powered by AI</p>
+
+        <!-- Error Message -->
+        {% if error_message %}
+        <div class="alert alert-error">
+            <strong>❌ Error:</strong> {{ error_message }}
+        </div>
+        {% endif %}
+
+        <!-- Success Message -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {% if category == 'success' %}
+                        <strong>✓ Success:</strong>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Sample Examples -->
+        <div class="examples-section">
+            <h3>📚 Quick Examples</h3>
+            <div class="example-links">
+                <button class="example-link" onclick="loadExample('simple')">Simple File Processing</button>
+                <button class="example-link" onclick="loadExample('filter')">Filter & Transform</button>
+            </div>
+        </div>
+
+        <!-- Conversion Form -->
+        <form method="POST" id="conversionForm">
+            <div class="form-group">
+                <label for="cobolCode">Enter COBOL Code:</label>
+                <textarea 
+                    name="cobol_code" 
+                    id="cobolCode" 
+                    required 
+                    placeholder="Paste your COBOL code here...">{{ cobol_code }}</textarea>
+                <div style="text-align: right; margin-top: 0.5rem;">
+                    <small id="charCounter" style="color: #6c757d;">0 / 100,000 characters</small>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="modelSelect">Select AI Model:</label>
+                <select name="model" id="modelSelect">
+                    {% for model in available_models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">
+                    ⚡ Convert to Java Spring Batch
+                </button>
+            </div>
+        </form>
+
+        <!-- Generated Java Files -->
+        {% if java_files %}
+            <hr style="margin: 2rem 0; border: none; border-top: 2px solid #e9ecef;">
+            
+            <h2 style="color: #28a745; margin-bottom: 1.5rem;">
+                ✅ Generated Java Files ({{ java_files|length }})
+            </h2>
+
+            {% for filename, content in java_files.items() %}
+                <div class="file-block" data-file="{{ filename }}">
+                    <div class="file-header">
+                        <h4>📄 {{ filename }}</h4>
+                        <button type="button" class="copy-btn" onclick="copyToClipboard('{{ filename }}')">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <pre>{{ content }}</pre>
+                </div>
+            {% endfor %}
+
+            {% if zip_path %}
+            <div style="margin-top: 2rem; text-align: center;">
+                <a href="/download" class="btn btn-success">
+                    📦 Download Complete Spring Batch Project (ZIP)
+                </a>
+                <p style="margin-top: 1rem; color: #6c757d; font-size: 0.9rem;">
+                    Includes all Java files, pom.xml, and project structure
+                </p>
+            </div>
+            {% endif %}
+        {% endif %}
+
+        <!-- Footer -->
+        <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e9ecef; text-align: center; color: #6c757d;">
+            <p>Powered by Ollama AI &middot; Made with ❤️ for Legacy System Modernization</p>
+            <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                Ensure Ollama is running locally: <code style="background: #f8f9fa; padding: 0.25rem 0.5rem; border-radius: 4px;">ollama serve</code>
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
